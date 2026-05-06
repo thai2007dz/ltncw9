@@ -1,0 +1,39 @@
+name: Maven CI/CD Build
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    # 1. Khai báo chiến lược Matrix với 3 hệ điều hành
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    # 2. Yêu cầu chạy trên hệ điều hành lấy từ biến matrix
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Tải mã nguồn về máy ảo
+      uses: actions/checkout@v4
+
+    - name: Cài đặt môi trường Java (JDK 17)
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven 
+
+    # 3. Chạy lệnh verify để kích hoạt tính năng chấm điểm Code Coverage của JaCoCo
+    - name: Chạy Build, Test và Check Coverage
+      run: mvn -B clean verify
+
+    # 4. Lưu trữ báo cáo Coverage (Artifact) sinh ra sau khi build
+    - name: Lưu trữ báo cáo Coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco-report-${{ matrix.os }}
+        path: target/site/jacoco/

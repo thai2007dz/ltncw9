@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BankAccount.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BankSystem</a> &gt; <a href="index.source.html" class="el_package">vn.edu.vnu.uet.banksystem</a> &gt; <span class="el_source">BankAccount.java</span></div><h1>BankAccount.java</h1><pre class="source lang-java linenums">package vn.edu.vnu.uet.banksystem;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Lớp đại diện cho tài khoản ngân hàng của người dùng.
+ * Quản lý các nghiệp vụ nạp tiền, rút tiền và ghi log trạng thái.
+ */
+public class BankAccount {
+
+<span class="fc" id="L12">  private static final Logger logger = LoggerFactory.getLogger(BankAccount.class);</span>
+
+  private final String accountId;
+  private double balance;
+
+  /**
+   * Khởi tạo tài khoản ngân hàng mới.
+   *
+   * @param accountId Mã tài khoản.
+   * @param initialBalance Số dư ban đầu.
+   */
+<span class="fc" id="L23">  public BankAccount(String accountId, double initialBalance) {</span>
+<span class="fc" id="L24">    this.accountId = accountId;</span>
+<span class="fc" id="L25">    this.balance = initialBalance;</span>
+<span class="fc" id="L26">    logger.info(&quot;Khởi tạo tài khoản accountId={} với số dư ban đầu={}&quot;, accountId, initialBalance);</span>
+<span class="fc" id="L27">  }</span>
+
+  /**
+   * Thực hiện nạp tiền vào tài khoản.
+   *
+   * @param amount Số tiền cần nạp.
+   */
+  public void deposit(double amount) {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">    if (amount &lt;= 0) {</span>
+<span class="fc" id="L36">      logger.warn(&quot;Giao dịch nạp tiền bị từ chối (accountId={}): Số tiền ({}) &lt;= 0&quot;,</span>
+<span class="fc" id="L37">          accountId, amount);</span>
+<span class="fc" id="L38">      throw new IllegalArgumentException(&quot;Số tiền nạp phải lớn hơn 0&quot;);</span>
+    }
+<span class="fc" id="L40">    balance += amount;</span>
+<span class="fc" id="L41">    logger.info(&quot;Nạp tiền thành công (accountId={}). Số tiền: {}. Số dư mới: {}&quot;,</span>
+<span class="fc" id="L42">        accountId, amount, balance);</span>
+<span class="fc" id="L43">  }</span>
+
+  /**
+   * Thực hiện rút tiền khỏi tài khoản.
+   *
+   * @param amount Số tiền cần rút.
+   */
+  public void withdraw(double amount) {
+<span class="fc bfc" id="L51" title="All 2 branches covered.">    if (amount &lt;= 0) {</span>
+<span class="fc" id="L52">      logger.warn(&quot;Giao dịch rút tiền bị từ chối (accountId={}): Số tiền ({}) &lt;= 0&quot;,</span>
+<span class="fc" id="L53">          accountId, amount);</span>
+<span class="fc" id="L54">      throw new IllegalArgumentException(&quot;Số tiền rút phải lớn hơn 0&quot;);</span>
+    }
+<span class="fc bfc" id="L56" title="All 2 branches covered.">    if (amount &gt; balance) {</span>
+<span class="fc" id="L57">      logger.warn(&quot;Giao dịch rút tiền bị từ chối (accountId={}): Số dư ({}) không đủ rút ({})&quot;,</span>
+<span class="fc" id="L58">          accountId, balance, amount);</span>
+<span class="fc" id="L59">      throw new IllegalArgumentException(&quot;Số dư không đủ&quot;);</span>
+    }
+<span class="fc" id="L61">    balance -= amount;</span>
+<span class="fc" id="L62">    logger.info(&quot;Rút tiền thành công (accountId={}). Số tiền: {}. Số dư mới: {}&quot;,</span>
+<span class="fc" id="L63">        accountId, amount, balance);</span>
+<span class="fc" id="L64">  }</span>
+
+  /**
+   * Lấy số dư hiện tại của tài khoản.
+   *
+   * @return Số dư tài khoản.
+   */
+  public double getBalance() {
+<span class="fc" id="L72">    return balance;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
